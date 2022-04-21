@@ -34,21 +34,29 @@ def download_file(path: str, urls: list, key: str = "img"):
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         filename = os.path.basename(urlparse(url).path)
         full_path = os.path.join(path, filename)
-        open(full_path, "wb").write(urlopen(req).read())
-        if key == "font":
-            font = TTFont(full_path)
-            dirname = os.path.dirname(full_path)
-            _, ext = os.path.splitext(full_path)
-            f_ = get_font_name(font)
-            if re.match(r".*woff.*", full_path, re.IGNORECASE):
-                with open(full_path, mode="rb") as infile:
-                    with open(os.path.join(dirname, f"{f_}.ttf"), mode="wb") as outfile:
-                        woff2.decompress(infile, outfile)
-            else:
-                os.rename(full_path, os.path.join(dirname, f"{f_}{ext}"))
-            os.remove(full_path)
-            full_path = os.path.join(dirname, f"{f_}{ext}")
-        logging.info(f"Downloaded {full_path}")
+        dirname = os.path.dirname(full_path)
+        try:
+            f = urlopen(req).read()
+            with open(full_path, "wb") as file:
+                file.write(f)
+            if key == "font":
+                font = TTFont(full_path)
+                _, ext = os.path.splitext(full_path)
+                f_ = get_font_name(font)
+                if re.match(r".*woff.*", full_path, re.IGNORECASE):
+                    with open(full_path, mode="rb") as infile:
+                        with open(os.path.join(dirname, f"{f_}.ttf"), mode="wb") as outfile:
+                            woff2.decompress(infile, outfile)
+                else:
+                    os.rename(full_path, os.path.join(dirname, f"{f_}{ext}"))
+                os.remove(full_path)
+                full_path = os.path.join(dirname, f"{f_}{ext}")
+            logging.info(f"Downloaded {full_path}")
+        except Exception:
+            logging.warning(f"Cannot download {full_path}")
+            with open(os.path.join(dirname, "errors.txt"), "a") as file:
+                file.write(f"{full_path}\n")
+
 
 
 def run_script(main_url):
@@ -76,7 +84,7 @@ def run_script(main_url):
         await interceptedRequest.continue_()
 
     async def main():
-        browser = await launch()
+        browser = await launch(devtools=True)
         page = await browser.newPage()
         await page.setRequestInterception(True)
         page.on("request", lambda response: asyncio.ensure_future(get_urls(response)))
