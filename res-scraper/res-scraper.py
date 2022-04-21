@@ -53,9 +53,9 @@ def download_file(path: str, urls: list, key: str = "img"):
                 full_path = os.path.join(dirname, f"{f_}{ext}")
             logging.info(f"Downloaded {full_path}")
         except Exception:
-            logging.warning(f"Cannot download {full_path}")
+            logging.warning(f"Cannot download {url}")
             with open(os.path.join(dirname, "errors.txt"), "a") as file:
-                file.write(f"{full_path}\n")
+                file.write(f"{url}\n")
 
 
 
@@ -84,7 +84,7 @@ def run_script(main_url):
         await interceptedRequest.continue_()
 
     async def main():
-        browser = await launch(devtools=True)
+        browser = await launch()
         page = await browser.newPage()
         await page.setRequestInterception(True)
         page.on("request", lambda response: asyncio.ensure_future(get_urls(response)))
