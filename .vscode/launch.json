@@ -10,7 +10,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/res-scraper/res-scraper.py",
       "args": [
-        "https://preview.themeforest.net/item/anderson-orthopedic-clinic-medical-center/full_screen_preview/20329008"
+        "https://preview.themeforest.net/item/anderson-orthopedic-clinic-medical-center/full_screen_preview/20329008",
+        "${workspaceFolder}/res-scraper"
       ],
       "console": "integratedTerminal",
       "justMyCode": true

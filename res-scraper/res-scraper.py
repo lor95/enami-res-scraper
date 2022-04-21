@@ -59,12 +59,12 @@ def download_file(path: str, urls: list, key: str = "img"):
 
 
 
-def run_script(main_url):
+def run_script(main_url, download_path):
     p_url = urlparse(main_url)
     list_of_font_format = ["woff", "woff2", "otf", "ttf"]
     list_of_img_format = ["png", "jpg", "jpeg", "svg"]
     RES_PATH = os.path.join(
-        os.path.dirname(__file__),
+        download_path,
         "resources",
         p_url.netloc.replace("/", "_") + p_url.path.replace("/", "_"),
     )
@@ -99,4 +99,4 @@ def run_script(main_url):
     logging.info("Exiting.")
 
 
-run_script(sys.argv[1])
+run_script(sys.argv[1], sys.argv[2])
