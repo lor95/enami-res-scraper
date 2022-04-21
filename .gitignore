@@ -1,0 +1,6 @@
+**/dist
+**/env/
+**/__pycache__/
+**.spec
+**.DS_Store
+**.code-workspace

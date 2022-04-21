@@ -1,0 +1,2 @@
+pyinstaller==5.0
+pyppeteer==1.0.2
