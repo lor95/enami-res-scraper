@@ -1,27 +1,27 @@
 import asyncio
-from pyppeteer import launch
-from urllib.parse import urlparse
-from urllib.request import urlopen, Request
-from fontTools.ttLib import woff2, TTFont
 import logging
-from .helpers import prepare_download_folders
 import os
 import re
+from urllib.parse import urlparse
+from urllib.request import Request, urlopen
+
+from fontTools.ttLib import TTFont, woff2
+from pyppeteer import launch
+
+from .helpers import prepare_download_folders
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(message)s")
 
 FONT_SPECIFIER_NAME_ID = 4
 
-class WebLoader:
 
+class WebLoader:
     def __init__(self, main_url, download_path):
         p_url = urlparse(main_url)
         list_of_font_format = ["woff", "woff2", "otf", "ttf"]
         list_of_img_format = ["png", "jpg", "jpeg", "svg"]
         self.path = prepare_download_folders(
-            download_path,
-            p_url.netloc.replace("/", "_") + p_url.path.replace("/", "_"),
-            "Web"
+            download_path, p_url.netloc.replace("/", "_") + p_url.path.replace("/", "_"), "Web"
         )
 
         font_urls = set()

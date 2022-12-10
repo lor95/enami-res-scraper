@@ -1,9 +1,11 @@
-import fitz
-from .helpers import prepare_download_folders
 import os
 
+import fitz
+
+from .helpers import prepare_download_folders
+
+
 class PDFLoader:
-    
     def __init__(self, pdf_path, download_path):
         doc = fitz.open(pdf_path)
         page_count = doc.page_count
@@ -17,10 +19,13 @@ class PDFLoader:
                 if xref in xreflist:
                     continue
                 image = self.recoverpix(doc, img)
-                n = image["colorspace"]
+                image["colorspace"]
                 imgdata = image["image"]
-                
-                imgfile = os.path.join(prepare_download_folders(download_path,os.path.basename(pdf_path),"PDF"), "img%05i.%s" % (xref, image["ext"]))
+
+                imgfile = os.path.join(
+                    prepare_download_folders(download_path, os.path.basename(pdf_path), "PDF"),
+                    "img%05i.%s" % (xref, image["ext"]),
+                )
                 fout = open(imgfile, "wb")
                 fout.write(imgdata)
                 fout.close()
@@ -38,7 +43,7 @@ class PDFLoader:
 
             try:
                 pix = fitz.Pixmap(pix0, mask)
-            except:
+            except Exception:
                 pix = fitz.Pixmap(doc.extract_image(xref)["image"])
 
             if pix0.n > 3:

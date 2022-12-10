@@ -1,5 +1,5 @@
-from loaders import WebLoader, PDFLoader
 import inquirer
+from loaders import PDFLoader, WebLoader
 
 questions = [
     inquirer.List(
@@ -15,4 +15,6 @@ if answers["download_type"] == "Web":
     destination_folder = input("Destination Folder: ")
     WebLoader(url, destination_folder)
 if answers["download_type"] == "PDF":
-    PDFLoader("C:\\Users\\loren\\Dropbox\\cartella_condivisa\\enami.it\\Clienti\\Antica birreria San Filippo\\Bevande Menu A5 Vini Italiani.pdf","C:\\Users\\loren\\Desktop")
+    pdf_path = input("PDF path: ")
+    destination_folder = input("Destination Folder: ")
+    PDFLoader(pdf_path, destination_folder)
